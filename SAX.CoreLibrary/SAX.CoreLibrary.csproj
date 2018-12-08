@@ -1,7 +1,15 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <Authors>Sambo Chea</Authors>
+    <Company>SAX Team.</Company>
+    <Description>Repositories with Unit Of Work and more.</Description>
+    <Copyright>2018</Copyright>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.2.0" />
+  </ItemGroup>
 
 </Project>
