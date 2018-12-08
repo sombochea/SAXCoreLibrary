@@ -13,6 +13,7 @@ namespace SAX.CoreLibrary.UnitOfWork
     public abstract class UnitOfWork : IUnitOfWork
     {
         private readonly DbContext _context;
+        private bool disposed = false;
 
         public UnitOfWork(DbContext context)
         {
@@ -29,11 +30,22 @@ namespace SAX.CoreLibrary.UnitOfWork
             return _context.SaveChangesAsync();
         }
 
-        public abstract void Dispose();
-
-        public bool Hack()
+        protected virtual void Dispose(bool disposing)
         {
-            return true;
+            if(!this.disposed)
+            {
+                if(disposing)
+                {
+                    _context.Dispose();
+                }
+            }
+            this.disposed = true;
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
         }
     }
 }
