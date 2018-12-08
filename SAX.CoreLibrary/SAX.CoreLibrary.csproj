@@ -6,6 +6,17 @@
     <Company>SAX Team.</Company>
     <Description>Repositories with Unit Of Work and more.</Description>
     <Copyright>2018</Copyright>
+    <PackageProjectUrl>https://github.com/SomboChea/SAXCoreLibrary</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/SomboChea/SAXCoreLibrary.git</RepositoryUrl>
+    <RepositoryType>GitHub</RepositoryType>
+    <PackageTags>.NET, .NET Core,</PackageTags>
+    <PackageReleaseNotes>Beta Version</PackageReleaseNotes>
+    <AssemblyVersion>0.0.0.1</AssemblyVersion>
+    <FileVersion>0.0.0.1</FileVersion>
+    <NeutralLanguage>en</NeutralLanguage>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>SAX.SecureKey.pfx</AssemblyOriginatorKeyFile>
   </PropertyGroup>
 
   <ItemGroup>
