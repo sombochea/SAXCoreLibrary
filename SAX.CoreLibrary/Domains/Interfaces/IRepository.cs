@@ -60,6 +60,7 @@ namespace SAX.CoreLibrary.Domains.Interfaces
         #region Entity State
 
         void Detached(TEntity entity);
+        bool IsDetached(TEntity entity);
         void Detached(IList<TEntity> entity);
         void Unchanged(TEntity entity);
 
@@ -68,6 +69,7 @@ namespace SAX.CoreLibrary.Domains.Interfaces
         #region Entity Attached
 
         void Attached(TEntity entity);
+        bool IsAttached(TEntity entity);
         void Attached(IList<TEntity> entity);
 
         #endregion

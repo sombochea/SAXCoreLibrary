@@ -11,40 +11,41 @@ namespace SAX.CoreLibrary.Repositories
     public abstract class BaseRepository<TEntity> : IRepository<TEntity> where TEntity : class
     {
         protected readonly DbContext Context;
-
+        internal readonly DbSet<TEntity> entities;
         protected BaseRepository(DbContext context)
         {
             Context = context;
+            entities = Context.Set<TEntity>();
         }
 
         public IEnumerable<TEntity> GetAll()
         {
-            return Context.Set<TEntity>();
+            return entities;
         }
 
         public IEnumerable<TEntity> Find(Func<TEntity, bool> predicate)
         {
-            return Context.Set<TEntity>().Where(predicate);
+            return entities.Where(predicate);
         }
 
         public TEntity GetById(object id)
         {
-            return Context.Set<TEntity>().Find(id);
+            return entities.Find(id);
         }
 
         public int Count(Func<TEntity, bool> predicate)
         {
-            return Context.Set<TEntity>().Count(predicate);
+            return entities.Count(predicate);
         }
 
         public int Count()
         {
-            return Context.Set<TEntity>().Count();
+            return entities.Count();
         }
 
         public long LongCount()
         {
-            return Context.Set<TEntity>().LongCount();
+            return entities.LongCount();
         }
 
         public int Save()
@@ -162,6 +163,21 @@ namespace SAX.CoreLibrary.Repositories
         public void Attached(IList<TEntity> entities)
         {
             Context.AttachRange(entities);
+        }
+
+        public bool IsDetached(TEntity entity)
+        {
+            return Context.Entry(entity).State == EntityState.Detached;
+        }
+
+        public bool IsAttached(TEntity entity)
+        {
+            return entities.Local.Any(e => e == entity);
+        }
+
+        public bool Exists(TEntity entity)
+        {
+            return IsAttached(entity);
         }
     }
 }

@@ -1,11 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using SAX.CoreLibrary.Data;
 using SAX.CoreLibrary.Domains.Interfaces;
-using SAX.CoreLibrary.Domains.Models;
-using SAX.CoreLibrary.Repositories;
 using System;
-using System.Collections.Generic;
-using System.Dynamic;
 using System.Threading.Tasks;
 
 namespace SAX.CoreLibrary.UnitOfWork
@@ -32,14 +27,8 @@ namespace SAX.CoreLibrary.UnitOfWork
 
         protected virtual void Dispose(bool disposing)
         {
-            if(!this.disposed)
-            {
-                if(disposing)
-                {
-                    _context.Dispose();
-                }
-            }
-            this.disposed = true;
+            if (!disposed && disposing) _context.Dispose();
+            disposed = true;
         }
 
         public void Dispose()

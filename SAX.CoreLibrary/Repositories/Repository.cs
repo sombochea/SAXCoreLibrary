@@ -1,66 +1,24 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SAX.CoreLibrary.Domains.Interfaces;
-using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace SAX.CoreLibrary.Repositories
 {
-    public class Repository<TEntity> : BaseRepository<TEntity>, ICRUDRepository<TEntity>, ISoftDeletable where TEntity : class
+    public class Repository<TEntity> : BaseRepository<TEntity>, ICRUDRepository<TEntity>, ISoftDeletable<TEntity> where TEntity : class
     {
         public Repository(DbContext context) : base(context)
         {
         }
 
-        public override void Add(TEntity entity, out bool added)
-        {
-            var ent = Context.Add(entity);
-            if (ent == null)
-            {
-                added = false;
-                return;
-            }
+        public override void Add(TEntity entity, out bool added) => added = Context.Add(entity) == null ? false : Save() > 0;
 
-            Save();
-            added = true;
-        }
+        public override void Update(TEntity entity, out bool updated) => updated = Context.Update(entity) == null ? false : Save() > 0;
 
-        public override void Update(TEntity entity, out bool updated)
-        {
-            var ent = Context.Update(entity);
-            if (ent == null)
-            {
-                updated = false;
-                return;
-            }
+        public override void Delete(TEntity entity, out bool deleted) => deleted = Context.Remove(entity) == null ? false : Save() > 0;
 
-            Save();
-            updated = true;
-        }
+        public IEnumerable<TEntity> GetEntities() => GetAll();
 
-        public override void Delete(TEntity entity, out bool deleted)
-        {
-            var ent = Context.Remove(entity);
-            if (ent == null)
-            {
-                deleted = false;
-                return;
-            }
-
-            Save();
-            deleted = true;
-
-        }
-
-        public IEnumerable<TEntity> GetEntities()
-        {
-            return GetAll();
-        }
-
-        public TEntity GetEntity(object id)
-        {
-            return GetById(id);
-        }
+        public TEntity GetEntity(object id) => GetById(id);
 
         public int CreateAndSaved(TEntity entity)
         {
@@ -98,10 +56,7 @@ namespace SAX.CoreLibrary.Repositories
             return Save();
         }
 
-        public bool IsDeleted()
-        {
-            return false;
-        }
+        public bool IsDeleted => false;
 
         public int CreateAndSaved(IList<TEntity> entities)
         {
@@ -138,5 +93,29 @@ namespace SAX.CoreLibrary.Repositories
             Delete(entities);
             return Save();
         }
+
+        public bool Deletable() => Context.Entry(entities).State == EntityState.Detached;
+
+        public bool Deletable(TEntity entity) => Context.Entry(entity).State == EntityState.Detached;
+
+        public void ForeDelete(TEntity entity)
+        {
+            if (Deletable(entity))
+            {
+                Attached(entity);
+                Delete(entity);
+            }
+        }
+        
+        public void ForeDelete(TEntity entity, out bool deleted)
+        {
+            deleted = false;
+            if (Deletable(entity))
+            {
+                Attached(entity);
+                Delete(entity, out deleted);
+            }
+        }
+
     }
 }
