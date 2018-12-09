@@ -1,5 +1,5 @@
 # SAXCoreLibrary
-## Using ASP.NET Core 2.1
+## Using ASP.NET Core 2.2
 ### Repositories with Unit Of Work and more.
 
 #### Build State
@@ -7,7 +7,7 @@
 
 ---
 ## Requirements & Includes
-* Dotnet Core 2.1
+* Dotnet Core 2.2
 * Visual Studio 2017 (For Deploy codes)
 ---
 ## Design Patterns
