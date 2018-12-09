@@ -12,6 +12,9 @@ namespace SAX.CoreLibrary.Repositories
     {
         protected readonly DbContext Context;
         internal readonly DbSet<TEntity> entities;
+
+        public abstract bool IsDeleted { get; }
+
         protected BaseRepository(DbContext context)
         {
             Context = context;
@@ -179,5 +182,24 @@ namespace SAX.CoreLibrary.Repositories
         {
             return IsAttached(entity);
         }
+
+        public abstract IEnumerable<TEntity> GetEntities();
+        public abstract TEntity GetEntity(object id);
+        public abstract int CreateAndSaved(TEntity entity);
+        public abstract int CreateAndSaved(IList<TEntity> entities);
+        public abstract int ModifyAndSaved(TEntity entity);
+        public abstract int ModifyAndSaved(IList<TEntity> entities);
+        public abstract int RemoveAndSaved(TEntity entity);
+        public abstract int RemoveAndSaved(IList<TEntity> entities);
+        public abstract int AddAndSaved(TEntity entity);
+        public abstract int AddAndSaved(IList<TEntity> entities);
+        public abstract int UpdateAndSaved(TEntity entity);
+        public abstract int UpdateAndSaved(IList<TEntity> entities);
+        public abstract int DeleteAndSaved(TEntity entity);
+        public abstract int DeleteAndSaved(IList<TEntity> entities);
+        public abstract bool Deletable();
+        public abstract bool Deletable(TEntity entity);
+        public abstract void ForeDelete(TEntity entity);
+        public abstract void ForeDelete(TEntity entity, out bool deleted);
     }
 }

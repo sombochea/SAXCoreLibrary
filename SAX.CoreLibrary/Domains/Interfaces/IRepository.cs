@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace SAX.CoreLibrary.Domains.Interfaces
 {
-    public interface IRepository<TEntity> where TEntity : class
+    public interface IRepository<TEntity> : ICRUDRepository<TEntity>, ISoftDeletable<TEntity> where TEntity : class
     {
         #region Get Entity
 
