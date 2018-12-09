@@ -1,6 +1,10 @@
 # SAXCoreLibrary
 ## Using ASP.NET Core 2.1
 ### Repositories with Unit Of Work and more.
+
+#### Build State
+[![Build Status](https://saxio.visualstudio.com/SAXIOProjectabytes/_apis/build/status/SomboChea.SAXCoreLibrary)](https://saxio.visualstudio.com/SAXIOProjectabytes/_build/latest?definitionId=2)
+
 ---
 ## Requirements & Includes
 * Dotnet Core 2.1
@@ -37,6 +41,136 @@
 
 <br />
 
+## How to use (with Test)
+
+* Person.cs
+
+      public class Person
+      {
+           public int Id { get; set; }
+           public string Name { get; set; }
+      }
+    
+* MyDbContext.cs
+
+      public class MyDbContext : DbContext
+      {
+           public MyDbContext(DbContextOptions options) : base(options)
+           {
+           }
+
+           public DbSet<Person> Person { get; set; }
+      }
+ 
+* IMyRepository.cs
+
+      public interface IMyRepository : IRepository<Person>
+      {
+           IEnumerable<Person> GetPeople();
+           void AddPerson(Person person);
+           Person GetPersonByName(string name);
+      }
+      
+* MyRepository.cs
+   
+      public class MyRepository : Repository<Person>, IMyRepository
+      {
+           public MyRepository(MyDbContext context) : base(context)
+           {
+           }
+
+           public IEnumerable<Person> GetPeople()
+           {
+               return GetAll();
+           }
+
+           public void AddPerson(Person person)
+           {
+               AddAndSaved(person);
+           }
+
+           public Person GetPersonByName(string name)
+           {
+               return Find(p => p.Name == name).FirstOrDefault();
+           }
+      }
+
+* IMyUnitOfWork.cs
+   
+      public interface IMyUnitOfWork : IUnitOfWork
+      {
+           IMyRepository PersonRepository();
+      }
+
+* MyUnitOfWork.cs
+
+      public class MyUnitOfWork : UnitOfWork, IMyUnitOfWork
+      {
+           private readonly IMyRepository personRepository;
+           public MyUnitOfWork(MyDbContext context) : base(context)
+           {
+               personRepository = new MyRepository(context);
+           }
+
+           public IMyRepository PersonRepository()
+           {
+               return personRepository;
+           }
+      }
+  
+ ---
+* Test Methods
+   
+      [Fact]
+        public void TestRepository()
+        {
+            Console.WriteLine("Starting Repository Test...");
+            
+            var optionBuilder = new DbContextOptionsBuilder<MyDbContext>();
+            MemoryCache myCache = new MemoryCache(new MemoryCacheOptions());
+            optionBuilder.UseInMemoryDatabase("MyDbMem");
+
+            var context = new MyDbContext(optionBuilder.Options);
+
+            IMyRepository repository = new MyRepository(context);
+
+            Person p = new Person { Id = 1, Name = "Sambo" };
+            Person p2 = new Person { Id = 2, Name = "Chea" };
+
+            repository.AddPerson(p);
+            repository.AddPerson(p2);
+
+            Assert.Equal<Person>(p, repository.GetById(1));
+            Assert.Equal<Person>(p2, repository.GetById(2));
+
+        }
+
+        [Fact]
+        public void TestUnitOfWork()
+        {
+            Console.WriteLine("Starting UnitOfWork Test...");
+
+            var optionBuilder = new DbContextOptionsBuilder<MyDbContext>();
+            MemoryCache myCache = new MemoryCache(new MemoryCacheOptions());
+            optionBuilder.UseInMemoryDatabase("MyDbMem2");
+
+            var context = new MyDbContext(optionBuilder.Options);
+
+            IMyUnitOfWork unitOfWork = new MyUnitOfWork(context);
+
+            Person p = new Person { Id = 1, Name = "Sambo" };
+            Person p2 = new Person { Id = 2, Name = "Chea" };
+
+            unitOfWork.PersonRepository().Add(p);
+            unitOfWork.PersonRepository().Add(p2);
+            unitOfWork.Complete();
+
+            Assert.Equal<Person>(p, unitOfWork.PersonRepository().GetPersonByName(p.Name));
+            Assert.Equal<Person>(p2, unitOfWork.PersonRepository().GetPersonByName(p2.Name));
+        }
+ 
+ 
+ ---
 # LICENSE
 
 MIT License
