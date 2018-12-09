@@ -1,27 +1,41 @@
-# ASP.NET Core
+# ASP.NET Core 2.2
 # Build and test ASP.NET Core projects targeting .NET Core.
 # Add steps that run tests, create a NuGet package, deploy, and more:
 # https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
 
-# Build ASP.NET Core project using Azure Pipelines
-# https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core?view=vsts
-
 pool:
-  vmImage: 'Ubuntu 16.04'
-  
+  vmImage: "Ubuntu 16.04"
+
 variables:
-  buildConfiguration: 'Release'
+  buildConfiguration: "Release"
 
 steps:
-- script: |
-    dotnet build --configuration $(buildConfiguration)
-    dotnet test dotnetcore-tests --configuration $(buildConfiguration) --logger trx
-    dotnet publish --configuration $(buildConfiguration) --output $BUILD_ARTIFACTSTAGINGDIRECTORY
+  - task: DotNetCoreInstaller@0
+    displayName: "Dotnet core installer 2.2.100"
+    inputs:
+      version: "2.2.100"
+      packageType: "sdk"
 
-- task: DotNetCoreCLI@2
-  inputs:
-    command: test
-    projects: '**SAXTestLabs**/*SAXTestLabs*.csproj'
-    arguments: '--configuration $(buildConfiguration)'
+  - task: DotNetCoreCLI@2
+    inputs:
+      command: restore
+      projects: "**/*.csproj"
 
-- task: PublishBuildArtifacts@1
+  - task: DotNetCoreCLI@2
+    inputs:
+      command: test
+      projects: "**/*Tests*/*.csproj"
+      arguments: '--configuration $(buildConfiguration) --collect "Code coverage"'
+
+  - script: |
+      dotnet build --configuration $(buildConfiguration)
+      dotnet test dotnetcore-tests --configuration $(buildConfiguration) --logger trx
+
+  - task: DotNetCoreCLI@2
+    inputs:
+      command: publish
+      publishWebProjects: True
+      arguments: "--configuration $(buildConfiguration) --output $BUILD_ARTIFACTSTAGINGDIRECTORY"
+      zipAfterPublish: True
+
+  - task: PublishBuildArtifacts@1
