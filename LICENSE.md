@@ -1,35 +1,3 @@
-# SAXCoreLibrary
-## Using ASP.NET Core 2.2
-### Repositories with Unit Of Work and more.
----
-## Requirements & Includes
-* Dotnet Core 2.2
-* Visual Studio 2017 (For Deploy codes)
----
-## Design Patterns
-* OOP (Interface, Abstract, Inheritance, Encapsulation, Polymorphism)
-* Repositories
-    * BaseRepository
-    * Repository
-* Unit of Work
-    * UnitOfWork
-* Dependency Injection
-    * IRepository
-    * ICRUDRepository
-    * ISoftDeletable
-    * IUnitOfWork
----
-## Installation
-    git clone https://github.com/SomboChea/SAXCoreLibrary.git
-<br />
-
-    dotnet restore
-    dotnet build
-    
-<br />
-
-# LICENSE
-
 MIT License
 
 Copyright (c) 2018 Sambo Chea
