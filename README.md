@@ -1,9 +1,9 @@
 # SAXCoreLibrary
-## Using ASP.NET Core 2.2
+## Using ASP.NET Core 2.1
 ### Repositories with Unit Of Work and more.
 ---
 ## Requirements & Includes
-* Dotnet Core 2.2
+* Dotnet Core 2.1
 * Visual Studio 2017 (For Deploy codes)
 ---
 ## Design Patterns
@@ -23,9 +23,18 @@
     git clone https://github.com/SomboChea/SAXCoreLibrary.git
 <br />
 
+    cd SAX.CoreLibrary
     dotnet restore
     dotnet build
     
+<br />
+
+## Test (xUnit)
+
+    cd SAXTestLabs
+    dotnet restore
+    dotnet test
+
 <br />
 
 # LICENSE
