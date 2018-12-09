@@ -30,9 +30,8 @@
     cd SAX.CoreLibrary
     dotnet restore
     dotnet build
-    
-<br />
 
+<br />
 ## Test (xUnit)
 
     cd SAXTestLabs
@@ -44,15 +43,15 @@
 ## How to use (with Test)
 
 * Person.cs
-
+    ```c#
       public class Person
       {
            public int Id { get; set; }
            public string Name { get; set; }
       }
-    
+    ```
 * MyDbContext.cs
-
+    ```c#
       public class MyDbContext : DbContext
       {
            public MyDbContext(DbContextOptions options) : base(options)
@@ -61,18 +60,18 @@
 
            public DbSet<Person> Person { get; set; }
       }
- 
+    ```
 * IMyRepository.cs
-
+    ```c#
       public interface IMyRepository : IRepository<Person>
       {
            IEnumerable<Person> GetPeople();
            void AddPerson(Person person);
            Person GetPersonByName(string name);
       }
-      
+    ```  
 * MyRepository.cs
-   
+   ```c#
       public class MyRepository : Repository<Person>, IMyRepository
       {
            public MyRepository(MyDbContext context) : base(context)
@@ -94,16 +93,16 @@
                return Find(p => p.Name == name).FirstOrDefault();
            }
       }
-
+    ```
 * IMyUnitOfWork.cs
-   
+   ```c#
       public interface IMyUnitOfWork : IUnitOfWork
       {
            IMyRepository PersonRepository();
       }
-
+    ```
 * MyUnitOfWork.cs
-
+    ```c#
       public class MyUnitOfWork : UnitOfWork, IMyUnitOfWork
       {
            private readonly IMyRepository personRepository;
@@ -117,10 +116,10 @@
                return personRepository;
            }
       }
-  
+    ```
  ---
 * Test Methods
-   
+    ```c#
       [Fact]
         public void TestRepository()
         {
@@ -168,8 +167,7 @@
             Assert.Equal<Person>(p, unitOfWork.PersonRepository().GetPersonByName(p.Name));
             Assert.Equal<Person>(p2, unitOfWork.PersonRepository().GetPersonByName(p2.Name));
         }
- 
- 
+    ```
  ---
 # LICENSE
 
