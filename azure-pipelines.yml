@@ -21,7 +21,7 @@ steps:
 - task: DotNetCoreCLI@2
   inputs:
     command: test
-    projects: '**/*Test/*.csproj'
+    projects: '**SAXTestLabs**/*SAXTestLabs*.csproj'
     arguments: '--configuration $(buildConfiguration)'
 
 - task: PublishBuildArtifacts@1
