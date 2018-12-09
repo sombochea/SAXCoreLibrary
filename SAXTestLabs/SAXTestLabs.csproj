@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
@@ -18,9 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="SAX.CoreLibrary">
-      <HintPath>..\SAX.CoreLibrary\bin\Release\netcoreapp2.2\SAX.CoreLibrary.dll</HintPath>
-    </Reference>
+    <ProjectReference Include="..\SAX.CoreLibrary\SAX.CoreLibrary.csproj" />
   </ItemGroup>
 
 </Project>
