@@ -17,14 +17,16 @@ steps:
       packageType: "sdk"
 
   - task: DotNetCoreCLI@2
+    displayName: "DotnetCore Restore"
     inputs:
       command: restore
       projects: "**/*.csproj"
 
   - task: DotNetCoreCLI@2
+    displayName: "DotnetCore Test"
     inputs:
       command: test
-      projects: "**/*Tests*/*.csproj"
+      projects: "**/*SAXTestLabs*/*.csproj"
       arguments: '--configuration $(buildConfiguration) --collect "Code coverage"'
 
   - script: |
@@ -33,7 +35,8 @@ steps:
   - task: DotNetCoreCLI@2
     inputs:
       command: publish
-      publishWebProjects: True
+      # publishWebProjects: True
+      publishLibraryProjects: True
       arguments: "--configuration $(buildConfiguration) --output $BUILD_ARTIFACTSTAGINGDIRECTORY"
       zipAfterPublish: True
 
