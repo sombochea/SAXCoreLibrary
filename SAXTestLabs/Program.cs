@@ -1,5 +1,4 @@
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Caching.Memory;
 using System;
 using Xunit;
 
@@ -13,7 +12,6 @@ namespace SAXTestLabs
             Console.WriteLine("Starting Repository Test...");
             
             var optionBuilder = new DbContextOptionsBuilder<MyDbContext>();
-            MemoryCache myCache = new MemoryCache(new MemoryCacheOptions());
             optionBuilder.UseInMemoryDatabase("MyDbMem");
 
             var context = new MyDbContext(optionBuilder.Options);
@@ -26,8 +24,8 @@ namespace SAXTestLabs
             repository.AddPerson(p);
             repository.AddPerson(p2);
 
-            Assert.Equal<Person>(p, repository.GetById(1));
-            Assert.Equal<Person>(p2, repository.GetById(2));
+            Assert.Equal(p, repository.GetById(1));
+            Assert.Equal(p2, repository.GetById(2));
 
         }
 
@@ -37,7 +35,6 @@ namespace SAXTestLabs
             Console.WriteLine("Starting UnitOfWork Test...");
 
             var optionBuilder = new DbContextOptionsBuilder<MyDbContext>();
-            MemoryCache myCache = new MemoryCache(new MemoryCacheOptions());
             optionBuilder.UseInMemoryDatabase("MyDbMem2");
 
             var context = new MyDbContext(optionBuilder.Options);
@@ -51,8 +48,8 @@ namespace SAXTestLabs
             unitOfWork.PersonRepository().Add(p2);
             unitOfWork.Complete();
 
-            Assert.Equal<Person>(p, unitOfWork.PersonRepository().GetPersonByName(p.Name));
-            Assert.Equal<Person>(p2, unitOfWork.PersonRepository().GetPersonByName(p2.Name));
+            Assert.Equal(p, unitOfWork.PersonRepository().GetPersonByName(p.Name));
+            Assert.Equal(p2, unitOfWork.PersonRepository().GetPersonByName(p2.Name));
         }
     }
 }
