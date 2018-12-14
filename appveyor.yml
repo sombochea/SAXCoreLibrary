@@ -1,0 +1,14 @@
+version: 1.0.{build}
+configuration: Release
+platform: Any CPU
+dotnet_csproj:
+  patch: true
+  file: '**\*.csproj'
+  version: '{version}'
+  package_version: '{version}'
+  assembly_version: '{version}'
+  file_version: '{version}'
+  informational_version: '{version}'
+build:
+  publish_core_console: true
+  verbosity: minimal

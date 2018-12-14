@@ -7,7 +7,7 @@ namespace SAX.CoreLibrary.Domains.Interfaces
     public interface ICRUDRepository<TEntity> where TEntity : class
     {
         IEnumerable<TEntity> GetEntities();
-        TEntity GetEntity(object id);
+        TEntity GetEntity(object primaryKey);
 
         int CreateAndSaved(TEntity entity);
         int CreateAndSaved(IList<TEntity> entities);

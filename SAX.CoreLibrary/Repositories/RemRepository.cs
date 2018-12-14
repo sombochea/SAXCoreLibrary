@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using SAX.CoreLibrary.Domains.Models;
+using SAX.CoreLibrary.Models;
 
 namespace SAX.CoreLibrary.Repositories
 {

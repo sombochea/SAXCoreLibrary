@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace SAX.CoreLibrary.Domains.Models
+namespace SAX.CoreLibrary.Models
 {
     public class OpenClass : IOpenClass
     {

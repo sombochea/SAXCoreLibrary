@@ -1,5 +1,5 @@
 ﻿using SAX.CoreLibrary.Domains.Interfaces;
-using SAX.CoreLibrary.Domains.Models;
+using SAX.CoreLibrary.Models;
 
 namespace SAX.CoreLibrary.Repositories
 {

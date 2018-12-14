@@ -1,0 +1,10 @@
+# name: codecov.yml
+
+fixes:
+    - "projects/SAXCoreLibrary-*::"
+
+codecov:
+    notify:
+        after_n_builds: 1
+        wait_for_ci: no
+        comment: off
