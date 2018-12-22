@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace SAX.CoreLibrary.Domains.Interfaces
 {
-    public interface IRepository<TEntity> : ICRUDRepository<TEntity>, ISoftDeletable<TEntity> where TEntity : class
+    public interface IRepository<TEntity> : ICRUDRepository<TEntity>, IPearEntityRepository<TEntity>, ISoftDeletable<TEntity> where TEntity : class
     {
         #region Get Entity
 

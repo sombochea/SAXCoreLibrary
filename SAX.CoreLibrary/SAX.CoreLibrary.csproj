@@ -21,6 +21,7 @@
     <Version>1.0.0.0</Version>
     <PackageLicenseUrl>https://github.com/SomboChea/SAXCoreLibrary/blob/master/LICENSE.md</PackageLicenseUrl>
     <PackageIconUrl>https://raw.githubusercontent.com/SomboChea/SAXCoreLibrary/master/40481967.png</PackageIconUrl>
+    <LangVersion>7.1</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>

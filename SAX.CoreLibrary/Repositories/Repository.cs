@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using SAX.CoreLibrary.Domains.Interfaces;
 using System.Collections.Generic;
 
 namespace SAX.CoreLibrary.Repositories
@@ -56,8 +55,6 @@ namespace SAX.CoreLibrary.Repositories
             return Save();
         }
 
-        public override bool IsDeleted => false;
-
         public override int CreateAndSaved(IList<TEntity> entities)
         {
             Create(entities);
@@ -94,7 +91,7 @@ namespace SAX.CoreLibrary.Repositories
             return Save();
         }
 
-        public override bool Deletable() => Context.Entry(entities).State == EntityState.Detached;
+        public override bool Deletable() => Context.Entry(Entity).State == EntityState.Detached;
 
         public override bool Deletable(TEntity entity) => Context.Entry(entity).State == EntityState.Detached;
 
@@ -117,5 +114,19 @@ namespace SAX.CoreLibrary.Repositories
             }
         }
 
+        public override bool IsExists(object primaryKey)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public override bool IsExists(string pearValue)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public override bool IsDeleted(object primaryKey)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

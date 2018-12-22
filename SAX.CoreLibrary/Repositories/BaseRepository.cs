@@ -3,7 +3,6 @@ using SAX.CoreLibrary.Domains.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace SAX.CoreLibrary.Repositories
@@ -11,44 +10,44 @@ namespace SAX.CoreLibrary.Repositories
     public abstract class BaseRepository<TEntity> : IRepository<TEntity> where TEntity : class
     {
         protected readonly DbContext Context;
-        internal readonly DbSet<TEntity> entities;
+        internal readonly DbSet<TEntity> Entity;
 
-        public abstract bool IsDeleted { get; }
+        public abstract bool IsDeleted(object primaryKey);
 
         protected BaseRepository(DbContext context)
         {
             Context = context;
-            entities = Context.Set<TEntity>();
+            Entity = Context.Set<TEntity>();
         }
 
         public IEnumerable<TEntity> GetAll()
         {
-            return entities;
+            return Entity;
         }
 
         public IEnumerable<TEntity> Find(Func<TEntity, bool> predicate)
         {
-            return entities.Where(predicate);
+            return Entity.Where(predicate);
         }
 
         public TEntity GetById(object id)
         {
-            return entities.Find(id);
+            return Entity.Find(id);
         }
 
         public int Count(Func<TEntity, bool> predicate)
         {
-            return entities.Count(predicate);
+            return Entity.Count(predicate);
         }
 
         public int Count()
         {
-            return entities.Count();
+            return Entity.Count();
         }
 
         public long LongCount()
         {
-            return entities.LongCount();
+            return Entity.LongCount();
         }
 
         public int Save()
@@ -157,7 +156,7 @@ namespace SAX.CoreLibrary.Repositories
         {
             Context.Database.RollbackTransaction();
         }
-        
+
         public void Attached(TEntity entity)
         {
             Context.Attach(entity);
@@ -175,7 +174,7 @@ namespace SAX.CoreLibrary.Repositories
 
         public bool IsAttached(TEntity entity)
         {
-            return entities.Local.Any(e => e == entity);
+            return Entity.Local.Any(e => e == entity);
         }
 
         public bool Exists(TEntity entity)
@@ -201,5 +200,31 @@ namespace SAX.CoreLibrary.Repositories
         public abstract bool Deletable(TEntity entity);
         public abstract void ForeDelete(TEntity entity);
         public abstract void ForeDelete(TEntity entity, out bool deleted);
+        public abstract bool IsExists(object primaryKey);
+        public abstract bool IsExists(string pearValue);
+
+        public virtual bool IsExists(TEntity entity)
+        {
+            return Entity.Any(t => t == entity);
+        }
+
+        public virtual int Restore()
+        {
+            var deletedEntities = Entity.IgnoreQueryFilters().Where(entity => EF.Property<bool>(entity, "IsDeleted") == true);
+            foreach (var deletedEntity in deletedEntities)
+            {
+                var entity = Context.ChangeTracker.Entries<TEntity>().First(entry => entry.Entity == deletedEntity);
+                entity.Property("IsDeleted").CurrentValue = false;
+            }
+            return Save();
+        }
+
+        public IList<TEntity> GetDeleted()
+        {
+            return Entity.IgnoreQueryFilters()
+                .Where(entity => EF.Property<bool>(entity, "IsDeleted") == true)
+                .ToList();
+        }
+        
     }
 }

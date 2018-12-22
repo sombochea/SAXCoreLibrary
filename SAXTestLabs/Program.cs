@@ -23,7 +23,8 @@ namespace SAXTestLabs
 
             repository.AddPerson(p);
             repository.AddPerson(p2);
-
+            
+            Assert.True(repository.IsExists(p.Id));
             Assert.Equal(p, repository.GetById(1));
             Assert.Equal(p2, repository.GetById(2));
 
@@ -48,6 +49,7 @@ namespace SAXTestLabs
             unitOfWork.PersonRepository().Add(p2);
             unitOfWork.Complete();
 
+            Assert.True(unitOfWork.PersonRepository().IsExists(p.Id));
             Assert.Equal(p, unitOfWork.PersonRepository().GetPersonByName(p.Name));
             Assert.Equal(p2, unitOfWork.PersonRepository().GetPersonByName(p2.Name));
         }
